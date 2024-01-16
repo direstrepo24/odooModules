@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_transfer_restrict_warehouse" model="res.groups">
+        <field name="name">Restrict Warehouse in Product Transfer</field>
+        <field name="category_id" ref="base.module_category_point_of_sale"/>
+    </record>
+</odoo>
+
+
+
