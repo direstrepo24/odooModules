@@ -1,6 +1,6 @@
 {
     "name": "Transfers Warehouse Restrict",
-    "version": "1.0",
+    "version": "17.0",
     "category": "Custom",
     "autor":"Didier Restrepo",
     "license": "AGPL-3",
