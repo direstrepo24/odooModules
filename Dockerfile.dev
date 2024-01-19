@@ -1,0 +1,70 @@
+FROM odoo:17
+
+USER root
+
+# Instala dependencias necesarias para el desarrollo
+RUN apt-get update && apt-get install -y --no-install-recommends \
+       build-essential \
+       python3-dev \
+       libxml2-dev \
+       libxslt1-dev \
+       libldap2-dev \
+       libsasl2-dev \
+       libssl-dev \
+       libjpeg-dev \
+       zlib1g-dev \
+       libfreetype6-dev \
+       liblcms2-dev \
+       libwebp-dev \
+       tcl \
+       expect \
+       git \
+       nano \
+       nodejs \
+       npm \
+       gettext \
+       fontconfig \
+       libxrender1 \
+       xfonts-75dpi \
+       xfonts-base \
+       wget \
+       sudo \
+    && npm install -g less \
+    && npm install -g less-plugin-clean-css
+    
+# Instala wkhtmltopdf
+ARG WKHTMLTOPDF_VERSION=0.12.6
+RUN wget -q -O wkhtmltox.deb "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-1/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb" && \
+    dpkg -i wkhtmltox.deb && \
+    rm wkhtmltox.deb
+    
+# Instala las dependencias de Python
+COPY requirements.txt /requirements.txt
+RUN pip3 install --no-cache-dir -r /requirements.txt
+
+# Copia el archivo de configuración de Odoo para desarrollo
+COPY odoo-dev.conf /etc/odoo/odoo.conf
+COPY odoo_entrypoint.sh /
+RUN chmod +x /odoo_entrypoint.sh
+
+USER odoo
+#crear directorios y permisos
+
+# Crea los directorios y establece el propietario y grupo en odoo
+
+# Monta el directorio de módulos personalizados
+VOLUME /mnt/extra-addons
+
+# Monta el directorio de datos de Odoo
+VOLUME /var/lib/odoo
+#VOLUME /usr/lib/python3/dist-packages/odoo/addons
+#monta el volumen para los archivos de datos en prueba
+#VOLUME /var/lib/odoo/filestore/odoo_dev_db
+#monta el volumen para los archivos de addons
+#VOLUME /var/lib/odoo/filestore/addons
+#monta volumen addons
+#VOLUME /mnt/odoo-addons
+
+ENTRYPOINT ["/odoo_entrypoint.sh"]
+#CMD ["odoo", "--config=/etc/odoo/odoo.conf", "--addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"]
+CMD ["odoo", "--config=/etc/odoo/odoo.conf"]

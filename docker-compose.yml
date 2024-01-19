@@ -1,0 +1,118 @@
+version: '3'
+services:
+  db:
+    container_name: db
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_DEV}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_DEV}
+      - POSTGRES_DB=${POSTGRES_DB_DEV}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT_DEV}:${POSTGRES_PORT_DEV}"
+    networks:
+      - odoo_network
+
+  db-prod:
+    container_name: db-prod
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_PROD}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_PROD}
+      - POSTGRES_DB=${POSTGRES_DB_PROD}
+    volumes:
+      - db-data-prod:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT_PROD}:${POSTGRES_PORT_PROD}"
+    networks:
+      - odoo_network
+
+  web:
+    container_name: odoo_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT_DEV=${POSTGRES_PORT_DEV}
+      - DB_USER_DEV=${POSTGRES_USER_DEV}
+      - DB_PASSWORD_DEV=${POSTGRES_PASSWORD_DEV}
+      - DB_NAME_DEV=${POSTGRES_DB_DEV}
+    volumes:
+      - ./custom-addons:/mnt/extra-addons
+      - odoo-data:/var/lib/odoo
+      #- odoo-filedata:/var/lib/odoo/filestore/odoo_dev_db
+      #- addons-data:/var/lib/odoo/filestore/addons
+      #- odoo-addons:/usr/lib/python3/dist-packages/odoo/addons
+      - ./odoo-dev.conf:/etc/odoo/odoo.conf
+      - ./etc:/etc/odoo
+    ports:
+      - "${ODOO_PORT_DEV}:${ODOO_PORT_DEV}"
+    networks:
+      - odoo_network
+
+  web-prod:
+    container_name: odoo_prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    depends_on:
+      - db-prod
+    environment:
+      - DB_HOST=db-prod
+      - DB_PORT_PROD=${POSTGRES_PORT_PROD}
+      - DB_USER_PROD=${POSTGRES_USER_PROD}
+      - DB_PASSWORD_PROD=${POSTGRES_PASSWORD_PROD}
+      - DB_NAME_PROD=${POSTGRES_DB_PROD}
+      - ODOO_ADMIN_PASSWORD=${ODOO_ADMIN_PASSWORD_PROD}
+    volumes:
+      - ./custom-addons:/mnt/extra-addons
+      - odoo-data-prod:/var/lib/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf 
+    ports:
+      - "${ODOO_PORT_PROD}:${ODOO_PORT_PROD}"
+    networks:
+      - odoo_network
+      
+  sync:
+    container_name: sync
+    build:
+      context: .
+      dockerfile: Dockerfile.sync
+    depends_on:
+      - db
+      - db-prod
+    volumes:
+      - ./sync_data.sh:/sync_data.sh
+      - ./sync_db.sh:/sync_db.sh
+    environment:
+      - POSTGRES_PORT_DEV=${POSTGRES_PORT_DEV}
+      - POSTGRES_USER_DEV=${POSTGRES_USER_DEV}
+      - POSTGRES_PASSWORD_DEV=${POSTGRES_PASSWORD_DEV}
+      - POSTGRES_DB_DEV=${POSTGRES_DB_DEV}
+      - POSTGRES_PORT_PROD=${POSTGRES_PORT_PROD}
+      - POSTGRES_USER_PROD=${POSTGRES_USER_PROD}
+      - POSTGRES_PASSWORD_PROD=${POSTGRES_PASSWORD_PROD}
+      - POSTGRES_DB_PROD=${POSTGRES_DB_PROD}
+    networks:
+      - odoo_network
+    links:
+      - db
+      - db-prod
+    command: ["/bin/bash", "-c", "./sync_db.sh && ./sync_data.sh"]
+    
+networks:
+  odoo_network:
+  
+volumes:
+  db-data:
+  db-data-prod:
+  odoo-data:
+  odoo-data-prod:
+  #odoo-filedata:
+  #addons-data:
+  #odoo-addons:
+   

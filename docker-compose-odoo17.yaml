@@ -1,0 +1,81 @@
+version: '3'
+services:
+  web:
+    container_name: odoo_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=${DB_HOST_DEV}
+      - DB_PORT_DEV=${DB_PORT_DEV}
+      - DB_USER_DEV=${DB_USER_DEV}
+      - DB_PASSWORD_DEV=${DB_PASSWORD_DEV}
+      - DB_NAME_DEV=${DB_NAME_DEV}
+    volumes:
+      - ./custom-addons:/mnt/extra-addons
+      - odoo-data:/var/lib/odoo
+      - ./odoo-dev.conf:/etc/odoo/odoo.conf
+    ports:
+      - "${ODOO_PORT_DEV}:${ODOO_PORT_DEV}"
+    networks:
+      - odoo_network
+
+  web-prod:
+    container_name: odoo_prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    depends_on:
+      - db-prod
+    environment:
+      - DB_HOST=${DB_HOST_PROD}
+      - DB_PORT_PROD=${DB_PORT_PROD}
+      - DB_USER_PROD=${DB_USER_PROD}
+      - DB_PASSWORD_PROD=${DB_PASSWORD_PROD}
+      - DB_NAME_PROD=${DB_NAME_PROD}
+      - ODOO_ADMIN_PASSWORD=${ODOO_ADMIN_PASSWORD_PROD}
+    volumes:
+      - ./custom-addons:/mnt/extra-addons
+      - odoo-data-prod:/var/lib/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf 
+    ports:
+      - "${ODOO_PORT_PROD}:${ODOO_PORT_PROD}"
+    networks:
+      - odoo_network
+
+  sync:
+    container_name: sync
+    build:
+      context: .
+      dockerfile: Dockerfile.sync
+    depends_on:
+      - db
+      - db-prod
+    volumes:
+      - ./sync_data.sh:/sync_data.sh
+      - ./sync_db.sh:/sync_db.sh
+      - ./.env:/app/.env  # Agregamos el archivo .env para que las variables estén disponibles
+    environment:
+      - POSTGRES_PORT_DEV=${POSTGRES_PORT_DEV}
+      - POSTGRES_USER_DEV=${POSTGRES_USER_DEV}
+      - POSTGRES_PASSWORD_DEV=${POSTGRES_PASSWORD_DEV}
+      - POSTGRES_DB_DEV=${POSTGRES_DB_DEV}
+      - POSTGRES_PORT_PROD=${POSTGRES_PORT_PROD}
+      - POSTGRES_USER_PROD=${POSTGRES_USER_PROD}
+      - POSTGRES_PASSWORD_PROD=${POSTGRES_PASSWORD_PROD}
+      - POSTGRES_DB_PROD=${POSTGRES_DB_PROD}
+    networks:
+      - odoo_network
+    links:
+      - db
+      - db-prod
+    command: ["/bin/bash", "-c", "./sync_db.sh && ./sync_data.sh"]
+
+networks:
+  odoo_network:
+  
+volumes:
+  odoo-data:
+  odoo-data-prod:

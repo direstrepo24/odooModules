@@ -1,0 +1,50 @@
+# Use la imagen oficial de Odoo 16 como base
+FROM odoo:16
+
+USER root
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        nano \
+        nodejs \
+        npm \
+        gettext \
+        fontconfig \
+        libxrender1 \
+        xfonts-75dpi \
+        xfonts-base \
+        wget \
+        && npm install -g less \
+        && npm install -g less-plugin-clean-css 
+        
+# Instala wkhtmltopdf
+ARG WKHTMLTOPDF_VERSION=0.12.6
+RUN wget -q -O wkhtmltox.deb "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-1/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb" && \
+    dpkg -i wkhtmltox.deb && \
+    rm wkhtmltox.deb
+# Instala las dependencias de Python
+COPY requirements.txt /requirements.txt
+RUN pip3 install --no-cache-dir -r /requirements.txt
+    
+# Copia el archivo de configuración de Odoo para producción
+COPY odoo.conf /etc/odoo/odoo.conf
+COPY odoo_entrypoint_prod.sh /
+RUN chmod +x /odoo_entrypoint_prod.sh
+
+# Copia el script de sincronización de datos de Odoo
+COPY sync_data.sh /
+RUN chmod +x /sync_data.sh
+
+# Copia el script de sincronización de la base de datos
+COPY sync_db.sh /
+RUN chmod +x /sync_db.sh
+
+USER odoo
+
+# Monta el directorio de módulos personalizados
+VOLUME /mnt/extra-addons
+
+# Monta el directorio de datos de Odoo
+VOLUME /var/lib/odoo
+
+ENTRYPOINT ["/odoo_entrypoint_prod.sh"]
+CMD ["odoo", "--config=/etc/odoo/odoo.conf"]

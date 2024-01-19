@@ -1,0 +1,22 @@
+FROM postgres:13
+
+# Instala curl, rsync y docker-cli
+RUN apt-get update && \
+    apt-get install -y curl rsync apt-transport-https ca-certificates curl gnupg-agent software-properties-common && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copia los scripts de sincronización
+COPY sync_db.sh /sync_db.sh
+COPY sync_data.sh /sync_data.sh
+
+# Establece permisos de ejecución para los scripts
+RUN chmod +x /sync_db.sh /sync_data.sh
+
+# Ejecuta los scripts de sincronización y luego el comando sleep para mantener el contenedor en ejecución
+CMD /sync_db.sh && /sync_data.sh && sleep infinity
+
+
