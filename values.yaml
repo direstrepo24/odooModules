@@ -1,0 +1,195 @@
+# values.yaml
+
+# Configuración global
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
+# Configuración común
+kubeVersion: ""
+nameOverride: ""
+fullnameOverride: ""
+commonLabels: {}
+commonAnnotations: {}
+clusterDomain: "cluster.local"
+extraDeploy: []
+diagnosticMode:
+  enabled: false
+  command: ["sleep"]
+  args: ["infinity"]
+
+# Configuración de la imagen Odoo
+image:
+  registry: "docker.io"
+  repository: "direstrepobr/rest_odoo"
+  pullPolicy: "IfNotPresent"
+  tag: "17.0-custom9"  # Reemplaza con la versión específica que deseas utilizar
+  pullSecrets: []
+  debug: false
+
+# Configuración de Odoo
+odoo:
+  odooEmail: "direstrepobr@gmail.com"
+  odooPassword: "SXNhYmVsbGEyNDc4"
+  odooSkipInstall: false
+  odooDatabaseFilter: ".*"
+  loadDemoData: false
+  smtpHost: ""
+  smtpPort: ""
+  smtpUser: ""
+  smtpPassword: ""
+  smtpProtocol: ""
+  existingSecret: ""
+  smtpExistingSecret: ""
+  allowEmptyPassword: false
+  command: []
+  args: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+
+# Configuración de despliegue de Odoo
+replicaCount: 1
+resources: {}
+podSecurityContext:
+  enabled: true
+  fsGroup: 0
+containerSecurityContext:
+  enabled: true
+  runAsUser: 0
+  seccompProfile: {}
+livenessProbe:
+  enabled: true
+  path: "/web/health"
+  initialDelaySeconds: 600
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  enabled: true
+  path: "/web/health"
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+startupProbe:
+  enabled: false
+  path: "/web/health"
+  initialDelaySeconds: 300
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+# Configuración de servicios
+service:
+  type: "LoadBalancer"
+  ports:
+    http: 80
+  sessionAffinity: "None"
+  clusterIP: ""
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  externalTrafficPolicy: "Cluster"
+  annotations: {}
+  extraPorts: []
+
+# Configuración de persistencia
+persistence:
+  enabled: true
+  resourcePolicy: ""
+  storageClass: ""
+  accessModes: []
+  accessMode: "ReadWriteOnce"
+  size: "10Gi"
+  dataSource: {}
+  annotations: {}
+  selector: ""
+  existingClaim: ""
+
+# Configuración de la base de datos PostgreSQL
+postgresql:
+  enabled: true
+  architecture: "standalone"
+  auth:
+    username: "bn_odoo"
+    password: ""
+    database: "bitnami_odoo"
+    existingSecret: ""
+  externalDatabase:
+    host: ""
+    port: 5432
+    user: "bn_odoo"
+    password: ""
+    database: "bitnami_odoo"
+    create: true
+    postgresqlPostgresUser: "postgres"
+    postgresqlPostgresPassword: ""
+    existingSecret: ""
+    existingSecretPasswordKey: ""
+    existingSecretPostgresPasswordKey: ""
+
+# Configuración de NetworkPolicy
+networkPolicy:
+  enabled: false
+  ingress:
+    enabled: false
+    namespaceSelector: {}
+    podSelector: {}
+    backendOnlyAccessibleByFrontend: false
+    customBackendSelector: {}
+    accessOnlyFrom:
+      enabled: false
+      namespaceSelector: {}
+      podSelector: {}
+    customRules: {}
+  egressRules:
+    denyConnectionsToExternal: false
+    customRules: {}
+# Configuración de volumen y permisos
+# Configuración de volumen y permisos
+volumePermissions:
+  enabled: false
+  resources: {}
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+    seccompProfile: {}
+
+# volumeMounts:
+#   - name: custom-addons
+#     mountPath: /bitnami/odoo/addons/custom-addons
+
+# extraVolumes:
+#   - name: custom-addons
+#     emptyDir: {}
+
+# extraVolumeMounts:
+#   - name: custom-addons
+#     mountPath: /bitnami/odoo/addons/custom-addons
+volumes:
+  - name: custom-addons
+    hostPath:
+      path: /mnt/custom-addons  # Cambia esto con la ruta correcta en tu host
+      type: Directory
+
+
+extraInitContainers:
+    - name: copy-custom-addons
+      image: busybox
+      imagePullPolicy: Always
+      command: ['sh', '-c', 'git clone https://github.com/direstrepo24/odooModules.git /bitnami/odoo/addons/custom-addons && rsync -av --exclude=".git" /bitnami/odoo/addons/custom-addons/ /bitnami/odoo/addons/']
+     # command: ['sh', '-c', 'git clone https://github.com/direstrepo24/odooModules.git /tmp/']
+      volumeMounts:
+        - name: custom-addons
+          mountPath: /bitnami/odoo/addons
+
+
+extraEnvVars:
+  - name: ODOO_LOAD_ADDITIONAL
+    value: "true"
+
+extraArgs:
+  - "--load=web,custom-addons"

@@ -1,6 +1,6 @@
 {
     'name': 'Mi Modulo POS',
-    'version': '1.0',
+    'version': '17.0',
     'category': 'Point of Sale 1',
     'summary': 'Personalización del Punto de Venta',
     'depends': ['base', 'point_of_sale', 'web'],

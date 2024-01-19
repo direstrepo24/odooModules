@@ -15,7 +15,7 @@
                 <button
                     type="object"
                     name="action_open_quants"
-                    attrs="{'invisible':[('type', 'not in', ['product','consu'])]}"
+                    modifiers="{'invisible':[('type', 'not in', ['product','consu'])]}"
                     class="oe_stat_button"
                     icon="fa-building-o"
                 >
@@ -35,7 +35,7 @@
                 <button
                     type="object"
                     name="action_open_quants"
-                    attrs="{'invisible':[('type', 'not in', ['product','consu'])]}"
+                    modifiers="{'invisible':[('type', 'not in', ['product','consu'])]}"
                     class="oe_stat_button"
                     icon="fa-building-o"
                 >

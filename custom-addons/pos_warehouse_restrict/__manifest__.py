@@ -1,6 +1,6 @@
 {
     "name": "POS Warehouse Restrict",
-    "version": "1.0",
+    "version": "17.0",
     "category": "Custom",
     "autor":"Didier Restrepo",
     "summary": "Restrict users to sell products from their assigned warehouse2",

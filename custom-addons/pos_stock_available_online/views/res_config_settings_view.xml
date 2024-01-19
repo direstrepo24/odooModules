@@ -30,7 +30,7 @@
                     </div>
                     <div
                         class="col-12 col-lg-6 o_setting_box"
-                        attrs="{'invisible': [('pos_display_product_quantity', '=', False)]}"
+                        modifiers="{'invisible': [('pos_display_product_quantity', '=', False)]}"
                     >
                         <div class="o_setting_right_pane">
                             <label
@@ -59,7 +59,7 @@
                     </div>
                     <div
                         class="col-12 col-lg-6 o_setting_box"
-                        attrs="{'invisible': [('pos_display_product_quantity', '=', False)]}"
+                        modifiers="{'invisible': [('pos_display_product_quantity', '=', False)]}"
                     >
                         <div class="o_setting_right_pane">
                             <label

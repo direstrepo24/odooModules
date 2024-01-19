@@ -28,12 +28,12 @@
                             <div class="content-group">
                                 <div
                                     class="mt16"
-                                    attrs="{'invisible': [('module_stock_available_mrp', '=', False)]}"
+                                    modifiers="{'invisible': [('module_stock_available_mrp', '=', False)]}"
                                 >
                                     <field
                                         name="stock_available_mrp_based_on"
                                         class="oe_inline"
-                                        attrs="{'required':[('module_stock_available_mrp','=',True)]}"
+                                        modifiers="{'required':[('module_stock_available_mrp','=',True)]}"
                                     />
                                 </div>
                             </div>

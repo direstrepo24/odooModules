@@ -33,10 +33,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && npm install -g less-plugin-clean-css
     
 # Instala wkhtmltopdf
-ARG WKHTMLTOPDF_VERSION=0.12.6
-RUN wget -q -O wkhtmltox.deb "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-1/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb" && \
-    dpkg -i wkhtmltox.deb && \
-    rm wkhtmltox.deb
+#ARG WKHTMLTOPDF_VERSION=0.12.6
+#RUN wget -q -O wkhtmltox.deb "https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-1/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb" && \
+#    dpkg -i wkhtmltox.deb && \
+#    rm wkhtmltox.deb
     
 # Instala las dependencias de Python
 COPY requirements.txt /requirements.txt

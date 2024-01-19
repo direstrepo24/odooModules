@@ -1,6 +1,6 @@
 {
     "name": "Colombian Configuration",
-    "version": "1.0",
+    "version": "17.0",
     "category": "Configuration",
     "author": "Didier Restrepo",
     "license": "AGPL-3",
