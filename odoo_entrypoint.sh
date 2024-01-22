@@ -18,7 +18,9 @@ fi
 
 
 # Comprueba si la base de datos está inicializada
-DB_INITIALIZED=$(psql -h $PGHOST -p $PGPORT -U $PGUSER -W $PGPASSWORD -lqt | cut -d \| -f 1 | grep -wq $PGDATABASE && echo "yes" || echo "no")
+#DB_INITIALIZED=$(psql -h $PGHOST -p $PGPORT -U $PGUSER -W $PGPASSWORD -lqt | cut -d \| -f 1 | grep -wq $PGDATABASE && echo "yes" || echo "no")
+#DB_INITIALIZED=$(psql -h $PGHOST -p $PGPORT -U $PGUSER -W $PGPASSWORD -lqt | cut -d \| -f 1 | grep -wq $PGDATABASE && echo "yes" || echo "no")
+DB_INITIALIZED=$(psql -h $PGHOST -p $PGPORT -U $PGUSER -lqt | grep -qw $PGDATABASE && echo "yes" || echo "no")
 
 # Si la base de datos no está inicializada, fuerza la inicialización con `-i base`
 if [ "$DB_INITIALIZED" == "no" ]; then

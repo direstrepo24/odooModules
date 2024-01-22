@@ -1,2 +1,4 @@
 pretty-bad-protocol
 boto3
+dropbox
+pyncclient

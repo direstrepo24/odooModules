@@ -2,12 +2,12 @@ version: '3'
 services:
   db:
     container_name: db
-    image: postgres:16
+    image: postgres:16-alpine
     environment:
       - POSTGRES_USER=${POSTGRES_USER_DEV}
       - POSTGRES_DB=${POSTGRES_DB_DEV}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_DEV}
-       - PGDATA=/var/lib/postgresql/data/pgdata
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
@@ -34,6 +34,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    restart: always
     depends_on:
       - db
     environment:
@@ -49,7 +50,7 @@ services:
       #- addons-data:/var/lib/odoo/filestore/addons
       #- odoo-addons:/usr/lib/python3/dist-packages/odoo/addons
       - ./odoo-dev.conf:/etc/odoo/odoo.conf
-      - ./etc:/etc/odoo
+      #- ./etc:/etc/odoo
     ports:
       - "${ODOO_PORT_DEV}:${ODOO_PORT_DEV}"
     networks:

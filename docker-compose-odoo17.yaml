@@ -1,81 +1,46 @@
-version: '3'
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+version: '2'
 services:
-  web:
-    container_name: odoo_dev
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    depends_on:
-      - db
-    environment:
-      - DB_HOST=${DB_HOST_DEV}
-      - DB_PORT_DEV=${DB_PORT_DEV}
-      - DB_USER_DEV=${DB_USER_DEV}
-      - DB_PASSWORD_DEV=${DB_PASSWORD_DEV}
-      - DB_NAME_DEV=${DB_NAME_DEV}
+  postgresql:
+    image: postgres:16-alpine
     volumes:
-      - ./custom-addons:/mnt/extra-addons
-      - odoo-data:/var/lib/odoo
-      - ./odoo-dev.conf:/etc/odoo/odoo.conf
+      - 'postgresql_data:/bitnami/postgresql'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      #- ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_USERNAME=bn_odoo
+      - POSTGRESQL_DATABASE=bitnami_odoo
+      - POSTGRES_PASSWORD=Themakers2023
+      - PGDATA=/var/lib/postgresql/data/pgdata
+  odoo:
+    image: docker.io/bitnami/odoo:17
+    restart: always
     ports:
-      - "${ODOO_PORT_DEV}:${ODOO_PORT_DEV}"
-    networks:
-      - odoo_network
-
-  web-prod:
-    container_name: odoo_prod
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
-    depends_on:
-      - db-prod
-    environment:
-      - DB_HOST=${DB_HOST_PROD}
-      - DB_PORT_PROD=${DB_PORT_PROD}
-      - DB_USER_PROD=${DB_USER_PROD}
-      - DB_PASSWORD_PROD=${DB_PASSWORD_PROD}
-      - DB_NAME_PROD=${DB_NAME_PROD}
-      - ODOO_ADMIN_PASSWORD=${ODOO_ADMIN_PASSWORD_PROD}
+      - '8080:8069'
+    
     volumes:
-      - ./custom-addons:/mnt/extra-addons
-      - odoo-data-prod:/var/lib/odoo
-      - ./odoo.conf:/etc/odoo/odoo.conf 
-    ports:
-      - "${ODOO_PORT_PROD}:${ODOO_PORT_PROD}"
-    networks:
-      - odoo_network
-
-  sync:
-    container_name: sync
-    build:
-      context: .
-      dockerfile: Dockerfile.sync
+      - 'odoo_data:/bitnami/odoo'
+      - ./custom-addons:/bitnami/odoo/addons
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - ./conf:/bitnami/odoo/conf/
     depends_on:
-      - db
-      - db-prod
-    volumes:
-      - ./sync_data.sh:/sync_data.sh
-      - ./sync_db.sh:/sync_db.sh
-      - ./.env:/app/.env  # Agregamos el archivo .env para que las variables estén disponibles
+      - postgresql
     environment:
-      - POSTGRES_PORT_DEV=${POSTGRES_PORT_DEV}
-      - POSTGRES_USER_DEV=${POSTGRES_USER_DEV}
-      - POSTGRES_PASSWORD_DEV=${POSTGRES_PASSWORD_DEV}
-      - POSTGRES_DB_DEV=${POSTGRES_DB_DEV}
-      - POSTGRES_PORT_PROD=${POSTGRES_PORT_PROD}
-      - POSTGRES_USER_PROD=${POSTGRES_USER_PROD}
-      - POSTGRES_PASSWORD_PROD=${POSTGRES_PASSWORD_PROD}
-      - POSTGRES_DB_PROD=${POSTGRES_DB_PROD}
-    networks:
-      - odoo_network
-    links:
-      - db
-      - db-prod
-    command: ["/bin/bash", "-c", "./sync_db.sh && ./sync_data.sh"]
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      #- ALLOW_EMPTY_PASSWORD=yes
+      - ODOO_DATABASE_HOST=postgresql
+      - ODOO_DATABASE_PORT_NUMBER=5432
+      - ODOO_DATABASE_USER=bn_odoo
+      - ODOO_DATABASE_NAME=bitnami_odoo
+      - ODOO_DATABASE_ADMIN_PASSWORD=bitnami
+      - ODOO_DATABASE_PASSWORD=Themakers2023
+      - DB_HOST=postgresql
 
-networks:
-  odoo_network:
-  
+   
 volumes:
-  odoo-data:
-  odoo-data-prod:
+  postgresql_data:
+    driver: local
+  odoo_data:
+    driver: local
