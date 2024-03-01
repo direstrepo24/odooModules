@@ -18,5 +18,5 @@
             "pos_order_remove_line/static/src/xml/*xml",
         ]
     },
-    "auto_install":True,
+    "auto_install":False,
 }

@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: 'bitnami/postgresql:16'
+    environment:
+      - POSTGRESQL_USERNAME=${POSTGRES_USER_DEV}
+      - POSTGRESQL_DATABASE=${POSTGRES_DB_DEV}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD_DEV}
+    volumes:
+      - db-data:/bitnami/postgresql
+    ports:
+      - "${POSTGRES_PORT_DEV}:${POSTGRES_PORT_DEV}"
+    networks:
+      - odoo_network
+
+  web:
+    container_name: odoo_dev
+    image: 'bitnami/odoo:17'
+    depends_on:
+      - db
+    environment:
+      - POSTGRESQL_HOST=db
+      - POSTGRESQL_PORT_NUMBER=${POSTGRES_PORT_DEV}
+      - POSTGRESQL_USERNAME=${POSTGRES_USER_DEV}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD_DEV}
+      - ODOO_DATABASE_USER=${POSTGRES_USER_DEV}
+      - ODOO_DATABASE_PASSWORD=${POSTGRES_PASSWORD_DEV}
+      - ODOO_DATABASE_NAME=${POSTGRES_DB_DEV}
+    volumes:
+      - ./custom-addons:/bitnami/odoo/extra-addons
+      - odoo-data:/bitnami/odoo/data
+      - ./odoo-dev.conf:/opt/bitnami/odoo/conf/odoo-server.conf
+    ports:
+      - "${ODOO_PORT_DEV}:8080"
+    networks:
+      - odoo_network
+
+volumes:
+  db-data:
+    driver: local
+  odoo-data:
+    driver: local
+
+networks:
+  odoo_network:
+    driver: bridge
+
+

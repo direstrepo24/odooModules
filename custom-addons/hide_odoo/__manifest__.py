@@ -27,7 +27,7 @@
     'demo': [],
     'application': True,
     'installable': True,
-    'auto_install': True,
+    'auto_install': False,
     'assets': {},
     'license': 'LGPL-3',
 }

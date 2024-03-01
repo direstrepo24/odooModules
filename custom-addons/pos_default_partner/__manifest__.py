@@ -13,5 +13,5 @@
     "data": ["views/res_config_settings_view.xml"],
     "website": "https://github.com/OCA/pos",
     "installable": True,
-    "auto_install":True,
+    "auto_install":False,
 }

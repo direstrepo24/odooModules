@@ -7,7 +7,7 @@
     "depends": ["account", "l10n_co"],
     "data": ["data/colombian_config_data.xml"],
     "installable": True,
-    "auto_install":True,
+    "auto_install":False,
 }
 
 

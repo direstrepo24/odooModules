@@ -16,6 +16,6 @@
         "views/product_product_view.xml",
         "views/res_config_settings_views.xml",
     ],
-    "installable": True,
-    "auto_install":True,
+    "installable": False,
+    "auto_install":False,
 }
