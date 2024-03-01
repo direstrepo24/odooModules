@@ -1,2 +1,6 @@
 pretty-bad-protocol
 boto3
+dropbox
+pyncclient
+nextcloud-api-wrapper
+paramiko
