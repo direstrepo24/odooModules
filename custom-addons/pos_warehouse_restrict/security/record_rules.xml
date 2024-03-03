@@ -4,7 +4,7 @@
         <field name="name">POS Config: Only allow employees to see their own POS configs</field>
         <field name="model_id" ref="model_pos_config"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-        <field name="domain_force">[('employee_ids', 'in', user.employee_ids.ids)]</field>
+        <field name="domain_force">[('current_user_warehouse_id', '=', user.warehouse_id.id)]</field>
         <field name="perm_create" eval="False"/>
         <field name="perm_write" eval="False"/>
         <field name="perm_unlink" eval="False"/>

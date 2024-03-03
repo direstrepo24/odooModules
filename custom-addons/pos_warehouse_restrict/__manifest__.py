@@ -3,7 +3,7 @@
     "version": "17.0",
     "category": "Custom",
     "autor":"Didier Restrepo",
-    "summary": "Restrict users to sell products from their assigned warehouse",
+    "summary": "Restrict users to sell products from their assigned warehouse2",
     "depends": ["base", "stock", "sale", "point_of_sale", "web", "hr", "account", "product"],
     "data": [
         "security/pos_warehouse_restrict_security.xml",
