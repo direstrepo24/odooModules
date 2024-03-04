@@ -6,9 +6,9 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <field name="location_id" position="attributes">
-                    <attribute name="domain">"[('id', 'child_of', user.warehouse_id.view_location_id.id)]"</attribute>
-                </field>
+            <field name="location_id" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True, 'attrs': {'invisible': [('user_has_restrict_warehouse_transfer', '=', False)]}}</attribute>
+            </field>
             </field>
         </record>
     </data>
