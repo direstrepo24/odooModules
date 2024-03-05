@@ -15,7 +15,6 @@
                 <button
                     type="object"
                     name="action_open_quants"
-                    modifiers="{'invisible':[('type', 'not in', ['product','consu'])]}"
                     class="oe_stat_button"
                     icon="fa-building-o"
                 >
@@ -35,7 +34,6 @@
                 <button
                     type="object"
                     name="action_open_quants"
-                    modifiers="{'invisible':[('type', 'not in', ['product','consu'])]}"
                     class="oe_stat_button"
                     icon="fa-building-o"
                 >
@@ -60,17 +58,13 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="stock.view_stock_product_tree" />
         <field name="arch" type="xml">
-            <tree position="attributes">
-                <attribute
-                    name="decoration-danger"
-                >virtual_available&lt;0 or immediately_usable_qty&lt;0</attribute>
-                <attribute
-                    name="decoration-info"
-                >virtual_available&gt;=0 or immediately_usable_qty&gt;0</attribute>
-            </tree>
             <field name="virtual_available" position="after">
-                <field name="immediately_usable_qty" />
+                <field
+                    name="immediately_usable_qty"
+                    decoration-danger="immediately_usable_qty &lt; 0"
+                />
             </field>
         </field>
     </record>
 </odoo>
+
