@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <template id="login_page_layout" inherit_id="web.login_layout" name="Login Page Layout">
         <xpath expr="//div[@class='card-body']//div[last()]" position="replace">
             <div class="text-center small mt-4 pt-3 login--footer" t-if="not disable_footer">
@@ -11,14 +10,9 @@
         </xpath>
     </template>
 
-    <record model="ir.ui.view" id="portal_record_sidebar">
-        <field name="inherit_id" ref="portal.portal_record_sidebar" />
-        <field name="arch" type="xml">
-            <xpath expr="//div[contains(@class, 'card-footer')]" position="attributes">
-                <attribute name="t-if">False</attribute>
-            </xpath>
-        </field>
-    </record>
+ 
+
+
 
     <template id="web.brand_promotion_message">
         <xpath expr="//final_message" position="replace"></xpath>
@@ -31,8 +25,10 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@id='about']" position="replace">
-
+                <!-- Contenido personalizado -->
+                Themakers 2024
             </xpath>     
-            </field> 
+        </field> 
     </record>            
 </odoo>
+
