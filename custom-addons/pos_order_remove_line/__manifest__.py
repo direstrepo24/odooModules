@@ -8,7 +8,7 @@
     "website": "https://github.com/OCA/pos",
     "category": "Point of Sale",
     "maintainers": ["robyf70"],
-    "version": "17.0",
+    "version": "16.0.1.0.0",
     "license": "LGPL-3",
     "depends": ["point_of_sale"],
     "assets": {
@@ -18,5 +18,5 @@
             "pos_order_remove_line/static/src/xml/*xml",
         ]
     },
-    "auto_install":False,
+    "auto_install":True,
 }

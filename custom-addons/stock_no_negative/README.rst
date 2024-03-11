@@ -81,7 +81,7 @@ The consumable products can still have a negative stock level.
 Changelog
 =========
 
-17.0 (2022-10-22)
+16.0.1.0.0 (2022-10-22)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [16.0][MIG] stock_no_negative

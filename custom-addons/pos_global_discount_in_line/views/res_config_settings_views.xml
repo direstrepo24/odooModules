@@ -11,13 +11,13 @@
                 position="attributes"
             >
                 <attribute
-                    name="modifiers"
+                    name="attrs"
                 >{'invisible':[('pos_global_discount_in_line','=',True)]}</attribute>
             </xpath>
 
             <xpath expr="//field[@name='pos_discount_pc']/.." position="attributes">
                 <attribute
-                    name="modifiers"
+                    name="attrs"
                 >{'invisible':[('pos_global_discount_in_line','=',True)]}</attribute>
             </xpath>
             <xpath expr="////field[@name='pos_discount_pc']/.." position="after">

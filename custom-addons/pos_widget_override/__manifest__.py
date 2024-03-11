@@ -1,6 +1,6 @@
 {
     'name': 'mi pos_widget_override',
-    'version': '17.0',
+    'version': '1.0',
     'category': 'Point of Sale 2',
     'summary': 'Personalización del Punto de Venta order Line',
     'depends': ['base', 'point_of_sale', 'web'],

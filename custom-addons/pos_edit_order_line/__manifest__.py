@@ -5,7 +5,7 @@
 
 {
     "name": "POS Edit Order Line",
-    "version": "17.0",
+    "version": "16.0.1.0.1",
     "summary": "POS Edit Order Line",
     "author": "Ooops, Cetmix, Odoo Community Association (OCA)",
     "contributors": "Cetmix",
@@ -25,5 +25,5 @@
     },
     "installable": True,
     "application": False,
-    "auto_install":False,
+    "auto_install":True,
 }

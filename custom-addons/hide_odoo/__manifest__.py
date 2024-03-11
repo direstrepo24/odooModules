@@ -1,7 +1,7 @@
 
 {
     'name': 'Hide Powered By Odoo',
-    'version': '17.0',
+    'version': '15.0.1.0.0',
     'category': '',
     'author': 'Doyenhub Software Solutions',
     'sequence': -200,
@@ -27,7 +27,7 @@
     'demo': [],
     'application': True,
     'installable': True,
-    'auto_install': False,
+    'auto_install': True,
     'assets': {},
     'license': 'LGPL-3',
 }

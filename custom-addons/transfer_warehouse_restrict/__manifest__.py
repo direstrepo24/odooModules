@@ -1,10 +1,10 @@
 {
     "name": "Transfers Warehouse Restrict",
-    "version": "17.0",
+    "version": "1.0",
     "category": "Custom",
     "autor":"Didier Restrepo",
     "license": "AGPL-3",
-    "summary": "Restrict users to transfer products from their assigned warehouse(1)",
+    "summary": "Restrict users to transfer products from their assigned warehouse",
     "depends": ["pos_warehouse_restrict"],
     "data": [
         "security/transfer_warehouse_restrict_security.xml",

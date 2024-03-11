@@ -31,7 +31,7 @@ services:
 
   web:
     container_name: odoo_dev
-    image: 'odoo:17'
+    image: 'odoo:16'
     #build:
     #  context: .
     #  dockerfile: Dockerfile.dev

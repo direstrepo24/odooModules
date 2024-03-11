@@ -1,8 +1,8 @@
 {
     "name": "Colombian Configuration",
-    "version": "17.0",
+    "version": "1.0",
     "category": "Configuration",
-    "author": "Didier Restrepo",
+    "author": "Didier Restrepo Bravo",
     "license": "AGPL-3",
     "depends": ["account", "l10n_co"],
     "data": ["data/colombian_config_data.xml"],

@@ -8,11 +8,11 @@
             <field name="use_payment_terminal" position="after">
                 <field
                     name="oca_payment_terminal_mode"
-                    modifiers="{'invisible': [('use_payment_terminal', '!=', 'oca_payment_terminal')]}"
+                    attrs="{'invisible': [('use_payment_terminal', '!=', 'oca_payment_terminal')]}"
                 />
                 <field
                     name="oca_payment_terminal_id"
-                    modifiers="{'invisible': [('use_payment_terminal', '!=', 'oca_payment_terminal')]}"
+                    attrs="{'invisible': [('use_payment_terminal', '!=', 'oca_payment_terminal')]}"
                 />
             </field>
         </field>
